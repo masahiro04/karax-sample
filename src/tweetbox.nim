@@ -21,6 +21,7 @@ proc render*(tweetBox: var TweetBox): VNode =
       onClickProc = () => (echo "Send tweet: " & tweetBox.tweetText)
     )
 
+
 # proc renderTweetBox*(): VNode =
 #   buildHtml(tdiv):
 #     textarea(onkeyup = (event: Event, node: VNode) => (content = node.value))
