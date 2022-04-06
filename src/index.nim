@@ -1,7 +1,25 @@
 include karax/prelude
+import tweetbox
 
-proc createDom(): VNode =
-  result = buildHtml(tdiv):
-    text "Hellosss world"
+type
+  State = object
+    tweetbox: TweetBox
 
-setRenderer(createDom)
+func initState(): State =
+  result.tweetbox = initTweetBox()
+  # result.anotherTweetBox = initTweetBox()
+
+proc main() =
+  var state = initState()
+
+  proc render(): VNode =
+    buildHtml(tdiv):
+      h1(text "Hello world")
+
+      render state.tweetbox
+      # render state.anotherTweetBox
+
+  setRenderer render
+
+# when isMainModuke:
+main()
