@@ -1,7 +1,7 @@
-include karax/prelude
+when defined(js):
+  include karax/prelude
 
-
-proc renderBlogIndex*(): VNode =
-  buildHtml(tdiv):
-    tdiv:
-      text "hoge!!!"
+  proc renderBlogIndex*(): VNode =
+    buildHtml(tdiv):
+      tdiv:
+        text "hoge!!!"
