@@ -7,7 +7,9 @@ proc renderHeader*(): VNode =
       nav(class = "flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto"):
         a(
           class = "mr-5 hover:text-gray-900 cursor-pointer border-b border-transparent hover:border-indigo-600",
-          href=makeUri("/blogs")
+          href=makeUri("/blogs"),
+          # anchorCB使うとSPAの遷移実現できる
+          onClick = anchorCB
         ):
           text "Blogs"
         a(class = "mr-5 hover:text-gray-900 cursor-pointer border-b border-transparent hover:border-indigo-600"):

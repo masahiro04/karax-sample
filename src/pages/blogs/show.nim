@@ -1,5 +1,22 @@
-include karax/prelude
+when defined(js):
+  include karax/prelude
+  import httpcore
+  import ../../components/card
 
-proc renderBlogShow*(): VNode =
-  buildHtml(tdiv):
-    text "Blog show!"
+  type
+    BlogShow* = ref object
+      status: HttpCode
+      content: kstring
+
+  proc newBlogShow*(): BlogShow =
+    BlogShow(
+      status: Http200
+    )
+
+  # TODO(okubo): ダブっている？からかエラー出る
+  proc render*(state: BlogShow): VNode =
+    buildHtml(tdiv):
+      tdiv:
+        text "hdsadadsadsaogaae!!!"
+
+

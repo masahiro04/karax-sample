@@ -1,5 +1,5 @@
 include karax/prelude
-import tweetbox, utils, tables, sugar, httpcore
+import utils, tables, sugar, httpcore
 import components/footer
 import components/header
 import components/card
@@ -14,6 +14,8 @@ type
   State = ref object
     originalTitle: cstring
     url: Location
+    blogIndex: BlogIndex
+    blogShow: BlogShow
 
 proc copyLocation(loc: Location): Location =
   Location(
@@ -32,6 +34,8 @@ proc newState(): State =
   State(
     originalTitle: document.title,
     url: copyLocation(window.location),
+    blogIndex: newBlogIndex(),
+    blogShow: newBlogShow(),
   )
 
 var state = newState()
@@ -54,9 +58,11 @@ type
 
 proc r(n: string, p: proc (params: Params): VNode): Route = Route(n: n, p: p)
 proc route(routes: openarray[Route]): VNode =
+  echo "haitta!!!aaaa"
   let path =
     if state.url.pathname.len == 0: "/" else: $state.url.pathname
   echo "----------------"
+  echo $state.url.pathname
   let prefix = if appName == "/": "" else: appName
   for route in routes:
     let pattern = (prefix & route.n).parsePattern()
@@ -67,20 +73,23 @@ proc route(routes: openarray[Route]): VNode =
       return route.p(params)
   return renderError("Unmatched route: " & path, Http500)
 
+# TODO: ここを参考にエラー解消する
+# https://github.com/nim-lang/nimforum/blob/master/src/frontend/forum.nim
+# https://github.com/nim-lang/nimforum/blob/master/src/frontend/about.nim
+
 proc main() =
+  echo "haitta!!!"
+
   proc render(): VNode =
     buildHtml(tdiv):
       renderHeader()
+      text "hogaae!!!"
       route([
-        r("/", (params: Params) => (renderBlogIndex())),
-        r("/blogs", (params: Params) => (renderBlogIndex())),
-        r("/blogs/@id", (params: Params) => (renderBlogShow()))
+        r("/blogs", (params: Params) => (render(state.blogIndex))),
+        # r("/blogs", (params: Params) => (renderBlogIndex())),
+        # r("/blogs/@id", (params: Params) => (renderBlogShow())),
+        r("/", (params: Params) => (render(state.blogShow))),
       ])
-      renderCard()
-      renderCard()
-      renderCard()
-      renderCard()
-      # render state.tweetbox
       renderFooter()
   echo "hogehoge"
   window.onPopState = onPopState

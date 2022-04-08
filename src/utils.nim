@@ -52,12 +52,23 @@ when defined(js):
       makeUri(relative, appName, search=search)
     else:
       makeUri(relative, appName)
+
   proc navigateTo*(uri: cstring) =
     # TODO: This was annoying. Karax also shouldn't have its own `window`.
     dom.pushState(dom.window.history, 0, cstring"", uri)
 
     # Fire the popState event.
     dom.dispatchEvent(dom.window, dom.newEvent("popstate"))
+
+  proc anchorCB*(e: Event, n: VNode) =
+    let mE = e.MouseEvent
+    if not (mE.metaKey or mE.ctrlKey):
+      e.preventDefault()
+
+      # TODO: Why does Karax have it's own Node type? That's just silly.
+      let url = n.getAttr("href")
+
+      navigateTo(url)
 
 proc parseUrlQuery*(query: string, result: var Table[string, string])
     {.deprecated: "use stdlib".} =
