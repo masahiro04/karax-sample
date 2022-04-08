@@ -1,4 +1,5 @@
 include karax/prelude
+import ../utils
 
 proc renderCard*(): VNode =
   buildHtml(tdiv(class = "max-w-2xl mx-auto sm:px-6 lg:px-8")):
@@ -13,6 +14,11 @@ proc renderCard*(): VNode =
         specimen book.
         """
       tdiv(class = "p-6 bg-white border-gray-200 text-right"):
-        a(class = "bg-blue-500 shadow-md text-sm text-white font-bold py-3 md:px-8 px-4 hover:bg-blue-400 rounded uppercase"):
+        a(
+          class = "bg-blue-500 shadow-md text-sm text-white font-bold py-3 md:px-8 px-4 hover:bg-blue-400 rounded uppercase",
+          href=makeUri("/blogs/1"),
+          onClick = anchorCB
+        ):
+          # anchorCB使うとSPAの遷移実現できる
           text "Click me!"
 

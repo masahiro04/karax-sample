@@ -1,5 +1,6 @@
 include karax/prelude
-import utils, tables, sugar, httpcore
+# optionsはsomeで使う
+import utils, tables, sugar, httpcore, options
 import components/footer
 import components/header
 import components/card
@@ -70,6 +71,9 @@ proc route(routes: openarray[Route]): VNode =
     var (matched, params) = pattern.match(path)
     parseUrlQuery($state.url.search, params)
     if matched:
+
+      echo route
+      # makeUri("/blogs")
       return route.p(params)
   return renderError("Unmatched route: " & path, Http500)
 
@@ -79,20 +83,22 @@ proc route(routes: openarray[Route]): VNode =
 
 proc main() =
   echo "haitta!!!"
-
   proc render(): VNode =
     buildHtml(tdiv):
       renderHeader()
-      text "hogaae!!!"
       route([
+        r("/", (params: Params) => (render(state.blogIndex))),
         r("/blogs", (params: Params) => (render(state.blogIndex))),
+        # TODO(okubo): 詳細実装でIDを入れる
+        r("/blogs/@id", (params: Params) => (render(state.blogShow, some(params["id"].parseInt)))),
+
+        r("/*", (params: Params) => (render(state.blogIndex))),
         # r("/blogs", (params: Params) => (renderBlogIndex())),
         # r("/blogs/@id", (params: Params) => (renderBlogShow())),
-        r("/", (params: Params) => (render(state.blogShow))),
       ])
       renderFooter()
-  echo "hogehoge"
   window.onPopState = onPopState
+  window.onload = onPopState
   setRenderer render
   addStylesheet "https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
 

@@ -1,6 +1,6 @@
 when defined(js):
   include karax/prelude
-  import httpcore
+  import httpcore, options
   import ../../components/card
 
   type
@@ -14,7 +14,7 @@ when defined(js):
     )
 
   # TODO(okubo): ダブっている？からかエラー出る
-  proc render*(state: BlogShow): VNode =
+  proc render*(state: BlogShow, blogId: Option[int]): VNode =
     buildHtml(tdiv):
       tdiv:
         text "hdsadadsadsaogaae!!!"

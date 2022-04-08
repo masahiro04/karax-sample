@@ -22,5 +22,3 @@ when defined(js):
         renderCard()
         renderCard()
         text "hdsadadsadsaogaae!!!"
-
-
